@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seu Processo de Divórcio</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rose: #993556;
+    --rose-light: #FBEAF0;
+    --rose-mid: #D4537E;
+    --rose-soft: #F4C0D1;
+    --rose-dark: #72243E;
+    --sand: #F7F3F0;
+    --text: #2C1A22;
+    --text-muted: #7A5568;
+    --text-hint: #B08090;
+    --border: rgba(153,53,86,0.15);
+    --white: #FFFFFF;
+    --green: #2D6A4F;
+    --green-light: #D8F3DC;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--sand);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 3rem;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--rose);
+    padding: 2.5rem 1.5rem 2rem;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    color: #FBEAF0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .hero p {
+    font-size: 14px;
+    color: #F4C0D1;
+    line-height: 1.6;
+  }
+  .hero-avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700; color: #fff;
+    margin: 0 auto 1rem;
+  }
+
+  /* NAV TABS */
+  .nav {
+    display: flex;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 14px 8px;
+    border: none;
+    background: none;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-hint);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .nav-btn.active {
+    color: var(--rose);
+    border-bottom-color: var(--rose);
+  }
+  .nav-icon {
+    font-size: 16px;
+  }
+
+  /* SECTIONS */
+  .section { display: none; padding: 1.25rem 1rem; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--rose-dark);
+    margin-bottom: 0.5rem;
+  }
+  .card-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* STEP TIMELINE */
+  .step-wrap { position: relative; padding-left: 44px; margin-bottom: 1.25rem; }
+  .step-wrap::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 32px;
+    bottom: -20px;
+    width: 2px;
+    background: var(--rose-soft);
+  }
+  .step-wrap:last-child::before { display: none; }
+  .step-num {
+    position: absolute;
+    left: 0; top: 0;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--rose);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-card {
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    padding: 1rem;
+  }
+  .step-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .step-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .tag-prep { background: #FBEAF0; color: #993556; }
+  .tag-doc  { background: #FFF3CD; color: #856404; }
+  .tag-acao { background: #D8F3DC; color: #2D6A4F; }
+
+  /* INFO BOX */
+  .info-box {
+    background: var(--rose-light);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--rose-mid);
+    padding: 0.9rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 13px;
+    color: var(--rose-dark);
+    line-height: 1.6;
+  }
+
+  /* DATA TABLE */
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 8px;
+  }
+  .data-row:last-child { border-bottom: none; }
+  .data-label { font-size: 12px; color: var(--text-muted); min-width: 110px; flex-shrink: 0; }
+  .data-value { font-size: 13px; font-weight: 500; color: var(--text); text-align: right; }
+
+  /* CHECKLIST */
+  .check-group-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin: 1.2rem 0 0.5rem;
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .check-item.done { opacity: 0.5; }
+  .check-item.done .check-text { text-decoration: line-through; }
+  .check-box {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    border-radius: 6px;
+    border: 1.5px solid var(--rose-mid);
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px;
+    transition: all 0.15s;
+  }
+  .check-item.done .check-box {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .check-tick { display: none; }
+  .check-item.done .check-tick { display: block; }
+  .check-text { font-size: 13px; color: var(--text); line-height: 1.4; }
+  .check-note { font-size: 11px; color: var(--text-hint); margin-top: 2px; }
+  .duo-pill {
+    font-size: 10px;
+    background: #F7F3F0;
+    color: var(--text-muted);
+    border-radius: 6px;
+    padding: 1px 6px;
+    margin-left: 4px;
+  }
+
+  /* PROGRESS */
+  .progress-wrap { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .progress-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .progress-bar { height: 8px; background: #F0E4EA; border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--rose); border-radius: 99px; transition: width 0.3s; }
+
+  /* FORM */
+  .form-group { margin-bottom: 1rem; }
+  .form-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.05em; }
+  .form-input, .form-textarea, .form-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    font-size: 14px;
+    color: var(--text);
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--rose-mid); }
+  .form-textarea { resize: vertical; min-height: 80px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--rose);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+    font-family: inherit;
+  }
+  .btn-primary:active { background: var(--rose-dark); }
+  .success-msg {
+    display: none;
+    background: var(--green-light);
+    color: var(--green);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 1rem;
+  }
+
+  /* SECTION HEADER */
+  .sec-header { margin-bottom: 1.2rem; }
+  .sec-header h2 { font-size: 18px; font-weight: 700; color: var(--rose-dark); }
+  .sec-header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+</style>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-avatar">D</div>
+  <div class="hero-badge">Confidencial</div>
+  <h1>Olá, Daiani!</h1>
+  <p>Aqui você encontra todas as informações<br>sobre o seu processo de divórcio.</p>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showTab('dados')">
+    <span class="nav-icon">📋</span>Seu caso
+  </button>
+  <button class="nav-btn" onclick="showTab('passos')">
+    <span class="nav-icon">🗺️</span>Passo a passo
+  </button>
+  <button class="nav-btn" onclick="showTab('docs')">
+    <span class="nav-icon">✅</span>Documentos
+  </button>
+  <button class="nav-btn" onclick="showTab('bens')">
+    <span class="nav-icon">📝</span>Meus bens
+  </button>
+</nav>
+
+<!-- TAB: DADOS -->
+<div class="section active" id="tab-dados">
+  <div class="sec-header">
+    <h2>Resumo do seu caso</h2>
+    <p>Informações extraídas da sua certidão de casamento.</p>
+  </div>
+
+  <div class="info-box">
+    Seu casamento é regido pela <strong>comunhão parcial de bens</strong> — isso significa que apenas os bens adquiridos durante o casamento (a partir de 06/08/2022) entram na partilha.
+  </div>
+
+  <div class="card">
+    <div class="card-title">Dados do casamento</div>
+    <div class="data-row"><span class="data-label">Data</span><span class="data-value">06 de agosto de 2022</span></div>
+    <div class="data-row"><span class="data-label">Regime</span><span class="data-value">Comunhão Parcial de Bens</span></div>
+    <div class="data-row"><span class="data-label">Cartório</span><span class="data-value">4º RCPN — Flamengo/RJ</span></div>
+    <div class="data-row"><span class="data-label">Livro / Folha</span><span class="data-value">B-289, Folha 34</span></div>
+    <div class="data-row"><span class="data-label">Termo</span><span class="data-value">Nº 43636</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Seus dados</div>
+    <div class="data-row"><span class="data-label">Nome completo</span><span class="data-value">Daiani Silva Santos de Araujo</span></div>
+    <div class="data-row"><span class="data-label">CPF</span><span class="data-value">056.384.905-31</span></div>
+    <div class="data-row"><span class="data-label">RG</span><span class="data-value">267925956 — DETRAN-RJ</span></div>
+    <div class="data-row"><span class="data-label">Nascimento</span><span class="data-value">21/08/1994</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Dados do cônjuge</div>
+    <div class="data-row"><span class="data-label">Nome completo</span><span class="data-value">Claudio Martins de Sousa Lima</span></div>
+    <div class="data-row"><span class="data-label">CPF</span><span class="data-value">756.295.343-00</span></div>
+    <div class="data-row"><span class="data-label">RG</span><span class="data-value">04011800422 — CNH-RJ</span></div>
+    <div class="data-row"><span class="data-label">Nascimento</span><span class="data-value">29/09/1976</span></div>
+  </div>
+</div>
+
+<!-- TAB: PASSOS -->
+<div class="section" id="tab-passos">
+  <div class="sec-header">
+    <h2>Passo a passo</h2>
+    <p>Veja como funciona o processo do seu divórcio.</p>
+  </div>
+
+  <div class="step-wrap">
+    <div class="step-num">1</div>
+    <div class="step-card">
+      <div class="step-tag tag-prep">Preparação</div>
+      <div class="step-title">Definir a via do divórcio</div>
+      <div class="step-desc">Como não há filhos menores, o divórcio pode ser feito em cartório — mais rápido e acessível. Se houver divergências, o caminho será judicial.</div>
+    </div>
+  </div>
+
+  <div class="step-wrap">
+    <div class="step-num">2</div>
+    <div class="step-card">
+      <div class="step-tag tag-doc">Documentos</div>
+      <div class="step-title">Reunir toda a documentação</div>
+      <div class="step-desc">Certidão de casamento, RGs, CPFs, comprovantes de residência e documentos dos bens adquiridos durante o casamento. Veja a aba "Documentos" para o checklist completo.</div>
+    </div>
+  </div>
+
+  <div class="step-wrap">
+    <div class="step-num">3</div>
+    <div class="step-card">
+      <div class="step-tag tag-prep">Preparação</div>
+      <div class="step-title">Definir os termos da partilha</div>
+      <div class="step-desc">Antes de ir ao cartório, é preciso ter clareza sobre o que será dividido e como. Use a aba "Meus bens" para registrar seus bens e facilitar essa conversa.</div>
+    </div>
+  </div>
+
+  <div class="step-wrap">
+    <div class="step-num">4</div>
+    <div class="step-card">
+      <div class="step-tag tag-acao">Ação</div>
+      <div class="step-title">Assinar a escritura em cartório</div>
+      <div class="step-desc">Ambos comparecem a qualquer Tabelionato de Notas do Brasil. O cartório lavra a escritura de divórcio com os termos acordados.</div>
+    </div>
+  </div>
+
+  <div class="step-wrap">
+    <div class="step-num">5</div>
+    <div class="step-card">
+      <div class="step-tag tag-acao">Ação</div>
+      <div class="step-title">Averbar no cartório de origem</div>
+      <div class="step-desc">O divórcio é averbado no 4º RCPN (Flamengo/RJ), onde seu casamento foi registrado, para constar no registro civil.</div>
+    </div>
+  </div>
+
+  <div class="step-wrap">
+    <div class="step-num">6</div>
+    <div class="step-card">
+      <div class="step-tag tag-acao">Ação</div>
+      <div class="step-title">Atualizar documentos pessoais</div>
+      <div class="step-desc">Após o divórcio, você pode retomar o nome de solteira ou mantê-lo. Atualize RG, CPF, passaporte e contas bancárias conforme necessário.</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>Importante:</strong> não há prazo mínimo de casamento para pedir divórcio no Brasil. Você pode iniciar o processo quando estiver pronta.
+  </div>
+</div>
+
+<!-- TAB: DOCS -->
+<div class="section" id="tab-docs">
+  <div class="sec-header">
+    <h2>Checklist de documentos</h2>
+    <p>Toque em cada item para marcar como reunido.</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Progresso</span>
+      <span id="prog-text">0 de 14</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="check-group-title">Documentos pessoais</div>
+
+  <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-box"><svg class="check-tick" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="check-text">RG <span class="duo-pill">você e Claudio</span></div><div class="check-note">Cópia autenticada ou original</div></div>
+  </div>
+  <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-box"><svg class="check-tick" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="check-text">CPF <span class="duo-pill">você e Claudio</span></div></div>
+  </div>
+  <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-box"><svg class="check-tick" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="check-text">Comprovante de residência <span class="duo-pill">você e Claudio</span></div><div class="check-note">Conta de água, luz ou gás — máx. 3 meses</div></div>
+  </div>
+
+  <div class="check-group-title">Documentos do casamento</div>
+
+  <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-box"><svg class="check-tick" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="check-text">Certidão de casamento atualizada</div><div class="check-note">Emitida há no máximo 90 dias — 4º RCPN, Flamengo/RJ</div></div>
+  </div>
+
+  <div class="check-group-title">Bens e patrimônio</div>
+
+  <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-box"><svg class="check-tick" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="check-text">Matrícula atualizada de imóveis (se houver)</div><div class="check-note">Emitida pelo Cartório de Registro de Imóveis</div></div>
+  </div>
+  <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-box"><svg class="check-tick" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="check-text">CRLV dos veículos (se houver)</div></div>
+  </div>
+  <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-box"><svg class="check-tick" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="check-text">Extratos bancários e investimentos</div><div class="check-note">Todos os bancos, com saldo à data do divórcio</div></div>
+  </div>
+  <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-box"><svg class="check-tick" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="check-text">Documentos de empresa ou cotas (se houver)</div></div>
+  </div>
+  <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-box"><svg class="check-tick" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="check-text">Lista de dívidas em comum (se houver)</div><div class="check-note">Financiamentos, empréstimos, cartões conjuntos</div></div>
+  </div>
+
+  <div class="check-group-title">Documentos fiscais</div>
+
+  <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-box"><svg class="check-tick" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="check-text">Declaração de Imposto de Renda <span class="duo-pill">você e Claudio</span></div><div class="check-note">Última declaração entregue à Receita Federal</div></div>
+  </div>
+  <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-box"><svg class="check-tick" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="check-text">Holerites ou comprovantes de renda <span class="duo-pill">você e Claudio</span></div><div class="check-note">Últimos 3 meses</div></div>
+  </div>
+  <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-box"><svg class="check-tick" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="check-text">Previdência privada (se houver)</div></div>
+  </div>
+</div>
+
+<!-- TAB: BENS -->
+<div class="section" id="tab-bens">
+  <div class="sec-header">
+    <h2>Registro de bens</h2>
+    <p>Preencha os bens adquiridos durante o casamento (a partir de agosto de 2022). Essas informações ajudarão sua advogada a preparar a partilha.</p>
+  </div>
+
+  <div class="info-box">
+    Lembre-se: bens que você tinha <strong>antes do casamento</strong>, e bens recebidos como herança ou doação, <strong>não entram na partilha</strong>.
+  </div>
+
+  <form id="bens-form">
+
+    <div class="card">
+      <div class="card-title">Imóveis</div>
+      <div class="form-group">
+        <label class="form-label">Descrição do imóvel (endereço)</label>
+        <textarea class="form-textarea" name="imovel_desc" placeholder="Ex: Apartamento na Rua X, nº 100, Rio de Janeiro/RJ"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Titularidade</label>
+          <select class="form-select" name="imovel_tit">
+            <option value="">Selecione</option>
+            <option>Conjunta</option>
+            <option>Só meu</option>
+            <option>Só dele</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valor estimado</label>
+          <input class="form-input" name="imovel_valor" type="text" placeholder="R$ 0,00">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Veículos</div>
+      <div class="form-group">
+        <label class="form-label">Descrição (marca, modelo, ano)</label>
+        <input class="form-input" name="veiculo_desc" type="text" placeholder="Ex: Honda Civic 2023">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Titularidade</label>
+          <select class="form-select" name="veiculo_tit">
+            <option value="">Selecione</option>
+            <option>Conjunta</option>
+            <option>Só meu</option>
+            <option>Só dele</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valor estimado</label>
+          <input class="form-input" name="veiculo_valor" type="text" placeholder="R$ 0,00">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Contas e investimentos</div>
+      <div class="form-group">
+        <label class="form-label">Banco(s) e tipo de conta</label>
+        <textarea class="form-textarea" name="conta_desc" placeholder="Ex: Conta corrente Itaú, poupança Caixa, investimentos XP..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Saldo total aproximado</label>
+        <input class="form-input" name="conta_valor" type="text" placeholder="R$ 0,00">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Outros bens</div>
+      <div class="form-group">
+        <label class="form-label">Descreva outros bens relevantes</label>
+        <textarea class="form-textarea" name="outros" placeholder="Móveis, eletrônicos, joias, objetos de valor, participação em empresas..."></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Dívidas em comum</div>
+      <div class="form-group">
+        <label class="form-label">Liste as dívidas contraídas durante o casamento</label>
+        <textarea class="form-textarea" name="dividas" placeholder="Financiamentos, empréstimos, cartão de crédito conjunto..."></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Observações</div>
+      <div class="form-group">
+        <label class="form-label">Algo mais que sua advogada deva saber?</label>
+        <textarea class="form-textarea" name="obs" placeholder="Informações adicionais, dúvidas, situações específicas..."></textarea>
+      </div>
+    </div>
+
+    <button type="button" class="btn-primary" onclick="submitForm()">Enviar para minha advogada</button>
+    <div class="success-msg" id="success-msg">
+      Informações enviadas com sucesso!<br>
+      <span style="font-weight:400;font-size:13px">Sua advogada entrará em contato em breve.</span>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  function showTab(tab) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  const TOTAL = 14;
+  function toggleCheck(el) {
+    el.classList.toggle('done');
+    const done = document.querySelectorAll('.check-item.done').length;
+    document.getElementById('prog-bar').style.width = Math.round(done / TOTAL * 100) + '%';
+    document.getElementById('prog-text').textContent = done + ' de ' + TOTAL;
+  }
+
+  function submitForm() {
+    const btn = document.querySelector('.btn-primary');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.style.display = 'none';
+      document.getElementById('success-msg').style.display = 'block';
+    }, 1200);
+  }
+</script>
+</html>
